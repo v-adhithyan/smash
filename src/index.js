@@ -1,22 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import renderHTML from 'react-render-html';
+import SplitterLayout from 'react-splitter-layout';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import AgendaForm from './forms.js';
 import './index.css';
+import NavBar from './navbar.js';
+import agendaApi from './constants.js';
 
-
-class SideBar extends React.Component {
-    render() {
-        return (
-            <div className="sidebar" />
-        )
-    }
-}
-
-const API = "http://localhost:8000/api/v1/agenda/"
 const rmj = require('render-markdown-js')
 
 class App extends React.Component {
-    /*constructor(props) {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -25,7 +20,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        fetch(API, {
+        fetch(agendaApi, {
             crossDomain: true,
             method: 'GET',
         })
@@ -34,32 +29,39 @@ class App extends React.Component {
                 return response.json();
             })
             .then(data => this.setState({ agendas: data }));
-    }*/
-    renderSidebar() {
-        return <SideBar/>;
     }
 
     render() {
-        /*let agenda_raw = "";
+        let agenda_raw = "";
         console.log(this.state.agendas);
         for (var i = 0; i < this.state.agendas.length; i++) {
             agenda_raw += this.state.agendas[i].agenda_text + "\n";
-        }*/
-        let agenda_raw = "# Agenda for 19 Nov 2018\n - Complete React tutorial\n - Adhoc tasks\n - Read auth package\n"
+        }
         const agenda_html = rmj(agenda_raw)
         return (
-            <div className="sidebar">
-            <h1 className="header">Agenda</h1>
-                <div>
+            <div>
+                <NavBar/>
                     {renderHTML(agenda_html)}
-                </div>
             </div>
         )
     }
 }
 
+class Root extends React.Component {
+    render() {
+        return (
+            <Router>
+                <div>
+                    <Route exact path='/' component={App} />
+                    <Route path='/agenda' component={AgendaForm} />
+                </div>
+            </Router>
+        )
+    }
+}
+
 ReactDOM.render(
-    <App />,
+   <Root/>,
     document.getElementById('root')
 );
 
