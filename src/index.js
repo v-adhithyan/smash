@@ -7,8 +7,29 @@ import AgendaForm from './forms.js';
 import './index.css';
 import NavBar from './navbar.js';
 import agendaApi from './constants.js';
+import {FlippingCard, FlippingCardFront} from 'react-ui-cards';
 
 const rmj = require('render-markdown-js')
+
+function AgendaCard(name, content) {
+    name = "agenda " + name
+    return(
+            <div className="col-sm-4">
+                <div className={name}>
+                    {content}
+                <center>
+                    <button className="btn btn-primary btn-primary-spacing">Edit</button>
+                    <button className="btn btn-primary btn-primary-spacing">Delete</button>
+                </center>
+                </div>
+                
+            </div>
+    )
+}
+
+function makeRows(cards) {
+
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -32,16 +53,23 @@ class App extends React.Component {
     }
 
     render() {
-        let agenda_raw = "";
-        console.log(this.state.agendas);
+        let cards = [];
+
         for (var i = 0; i < this.state.agendas.length; i++) {
-            agenda_raw += this.state.agendas[i].agenda_text + "\n";
+            let agenda_raw = this.state.agendas[i].agenda_text ;
+            let agenda_html = rmj(agenda_raw);
+            let rendered_agenda = renderHTML(agenda_html);
+            let name = "agenda-col-" + ((i%4)+1);
+            cards.push(AgendaCard(name, rendered_agenda))
         }
-        const agenda_html = rmj(agenda_raw)
+        
+       
         return (
             <div>
                 <NavBar/>
-                    {renderHTML(agenda_html)}
+                <div>
+                    {cards}
+                </div>
             </div>
         )
     }

@@ -11,7 +11,10 @@ class AgendaForm extends React.Component {
             value: '',
             agenda_title: '',
             agenda_text: '',
-            reflection: ''
+            reflection: '',
+            submitted: false,
+            success: true,
+            error: false,
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -28,8 +31,37 @@ class AgendaForm extends React.Component {
         });
     }
     
+    setDefaults() {
+        this.setState({
+            success: false,
+            error: false
+        })
+    }
+
+    setSuccess() {
+        this.setState({
+            success: true
+        })
+    }
+
+    setFail() {
+        this.setState({
+            error: true
+        })
+    }
+
+    showAlert() {
+        if(this.state.success) {
+            SuccessAlert("Agenda created successfully")
+        } else {
+            DangerAlert("Failed to create agenda.")
+        }
+    }
+
     handleSubmit(event) {
         event.preventDefault();
+        this.setDefaults()
+        const that = this;
 
         let data = {
             agenda_title: this.state.agenda_title.toString(),
@@ -41,28 +73,35 @@ class AgendaForm extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method: 'POST',
-            body: JSON.stringify(data),
-            mode: "no-cors",
+            method: 'post',
+            body: JSON.stringify(data)
         }).then(function(response) {
-            return response.json()
+            if(response.status === 200 || response.status === 201) {
+                that.setSuccess();
+                alert('success');
+            } else {
+                this.state.error = true
+                that.setFail();
+                alert('fail');
+            }
         }).then(function(data) {
-            console.log(data);
-            SuccessAlert("success")
-            //Alert.successAlert("success");
-            //<SuccessAlert message="Successfully created agenda."/>
-        });
+            that.showAlert()
+        })
     }
 
     render() {
         return (
             <div>
                 <NavBar/>
-                {SuccessAlert("success")}
-                <div className="container">
-                    <h1>{this.props.form_name || this.state.form_name}</h1>
+                <div className="row">
+                <div className="col-sm-4"></div>
+                <div className="col-sm-4">
+                    <center><h1>{this.props.form_name || this.state.form_name}</h1>
+                        {SuccessAlert("Hello, there! Created with love by adhithyan vijayakumar.")}
+                    </center>
+                    <center>
                     <form onSubmit={this.handleSubmit}>
-                        <div className="form-group">
+                        <div>
                             <label>
                                 Title:
                     <input
@@ -74,7 +113,7 @@ class AgendaForm extends React.Component {
                                     onChange={this.handleChange} />
                             </label>
                         </div>
-                        <div className="form-group">
+                        <div >
                             <label>
                                 Agenda:
                     <textarea
@@ -86,7 +125,7 @@ class AgendaForm extends React.Component {
                                     onChange={this.handleChange} />
                             </label>
                         </div>
-                        <div className="form-group">
+                        <div>
                             <label>
                                 Reflection:
                     <textarea
@@ -101,6 +140,9 @@ class AgendaForm extends React.Component {
                         </div>
                         <button type="submit" className="btn btn-default btn-custom">Submit</button>
                     </form>
+                    </center>
+                </div>
+                <div className="col-sm-4"></div>
                 </div>
             </div>
         );
@@ -111,6 +153,20 @@ function SuccessAlert(props) {
     return (
         <div class="alert alert-success" role="alert">
             {props}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    )
+}
+
+function DangerAlert(props) {
+    return (
+        <div class="alert alert-danger" role="alert">
+            {props}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
     )
 }
