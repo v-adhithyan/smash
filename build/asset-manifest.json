@@ -1,13 +1,13 @@
 {
-  "main.css": "/static/css/main.abf88eae.chunk.css",
-  "main.js": "/static/js/main.c45862c4.chunk.js",
-  "main.js.map": "/static/js/main.c45862c4.chunk.js.map",
-  "static/js/1.0b083c8d.chunk.js": "/static/js/1.0b083c8d.chunk.js",
-  "static/js/1.0b083c8d.chunk.js.map": "/static/js/1.0b083c8d.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
-  "static/css/main.abf88eae.chunk.css.map": "/static/css/main.abf88eae.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.92dd44a7fd32e3fae2bf17775d850073.js": "/precache-manifest.92dd44a7fd32e3fae2bf17775d850073.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/smash/build/static/css/main.87ed94b4.chunk.css",
+  "main.js": "/smash/build/static/js/main.13d8c802.chunk.js",
+  "main.js.map": "/smash/build/static/js/main.13d8c802.chunk.js.map",
+  "static/js/1.381f08c6.chunk.js": "/smash/build/static/js/1.381f08c6.chunk.js",
+  "static/js/1.381f08c6.chunk.js.map": "/smash/build/static/js/1.381f08c6.chunk.js.map",
+  "runtime~main.js": "/smash/build/static/js/runtime~main.3595dd32.js",
+  "runtime~main.js.map": "/smash/build/static/js/runtime~main.3595dd32.js.map",
+  "static/css/main.87ed94b4.chunk.css.map": "/smash/build/static/css/main.87ed94b4.chunk.css.map",
+  "index.html": "/smash/build/index.html",
+  "precache-manifest.f7b3237a19c482ad5adbdcdb65c58420.js": "/smash/build/precache-manifest.f7b3237a19c482ad5adbdcdb65c58420.js",
+  "service-worker.js": "/smash/build/service-worker.js"
 }

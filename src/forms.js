@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from './navbar.js';
 import agendaApi from './constants.js';
-//import {DangerAlert, SuccessAlert} from './alerts.js';
+import {DangerAlert, SuccessAlert} from './alerts.js';
 
 class AgendaForm extends React.Component {
     constructor(props) {
@@ -13,8 +13,9 @@ class AgendaForm extends React.Component {
             agenda_text: '',
             reflection: '',
             submitted: false,
-            success: true,
+            success: false,
             error: false,
+            message: "Hey there, Plan your awesome work !"
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -38,24 +39,18 @@ class AgendaForm extends React.Component {
         })
     }
 
-    setSuccess() {
+    setSuccess(message) {
         this.setState({
-            success: true
+            success: true,
+            message: message
         })
     }
 
-    setFail() {
+    setFail(message) {
         this.setState({
-            error: true
+            error: true,
+            message: message
         })
-    }
-
-    showAlert() {
-        if(this.state.success) {
-            SuccessAlert("Agenda created successfully")
-        } else {
-            DangerAlert("Failed to create agenda.")
-        }
     }
 
     handleSubmit(event) {
@@ -77,27 +72,34 @@ class AgendaForm extends React.Component {
             body: JSON.stringify(data)
         }).then(function(response) {
             if(response.status === 200 || response.status === 201) {
-                that.setSuccess();
-                alert('success');
+                that.setSuccess("Successfully created agenda");
             } else {
                 this.state.error = true
-                that.setFail();
-                alert('fail');
+                that.setFail("Failed to create agenda");
             }
-        }).then(function(data) {
-            that.showAlert()
-        })
+        }).then(data => {})
+        .catch(error => that.setFail(error.message) )
     }
 
     render() {
         return (
             <div>
                 <NavBar/>
+                <center>
+                    {
+                        this.state.success ?
+                            <SuccessAlert message={this.state.message} /> : <div></div>
+                    }
+
+                    {
+                        this.state.error ?
+                            <DangerAlert message={this.state.message} /> : <div></div>
+                    }
+                </center>
                 <div className="row">
                 <div className="col-sm-4"></div>
                 <div className="col-sm-4">
                     <center><h1>{this.props.form_name || this.state.form_name}</h1>
-                        {SuccessAlert("Hello, there! Created with love by adhithyan vijayakumar.")}
                     </center>
                     <center>
                     <form onSubmit={this.handleSubmit}>
@@ -147,28 +149,6 @@ class AgendaForm extends React.Component {
             </div>
         );
     }
-}
-
-function SuccessAlert(props) {
-    return (
-        <div class="alert alert-success" role="alert">
-            {props}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    )
-}
-
-function DangerAlert(props) {
-    return (
-        <div class="alert alert-danger" role="alert">
-            {props}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    )
 }
 
 export default AgendaForm;

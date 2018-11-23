@@ -1,31 +1,26 @@
-/*import React from 'react-dom';
+import React, { Component } from 'react';
 
-class DangerAlert extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div class="alert alert-danger" role="alert">
-                {this.props.message}
-            </div>
-        )
-    }
+function SuccessAlert(props) {
+    let className = "alert alert-success";
+    return (
+        <div className={className} role="alert">
+            {props.message}
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    )
 }
 
-class SuccessAlert extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div class="alert alert-success" role="alert">
-                {this.props.message}
-            </div>
-        )
-    }
+function DangerAlert(props) {
+    return (
+        <div className="alert alert-danger" role="alert">
+            {props.message}
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    )
 }
 
-export default SuccessAlert;*/
+export {SuccessAlert, DangerAlert};

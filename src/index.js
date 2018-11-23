@@ -49,7 +49,8 @@ class App extends React.Component {
                 console.log(response)
                 return response.json();
             })
-            .then(data => this.setState({ agendas: data }));
+            .then(data => this.setState({ agendas: data }))
+            .catch(error => alert("Failed to fetch. Please try again.!"));
     }
 
     render() {
