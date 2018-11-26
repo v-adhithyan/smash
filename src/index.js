@@ -8,6 +8,8 @@ import './index.css';
 import NavBar from './navbar.js';
 import agendaApi from './constants.js';
 import {FlippingCard, FlippingCardFront} from 'react-ui-cards';
+import {DangerAlert, SuccessAlert, InfoAlert} from './alerts.js';
+//import LinkButton from './buttons.js'
 
 const rmj = require('render-markdown-js')
 
@@ -34,23 +36,42 @@ function makeRows(cards) {
 class App extends React.Component {
     constructor(props) {
         super(props);
-
+        
+        let agenda = agendaApi;
+        if(props.api) {
+            agenda = props.api
+        }
         this.state = {
             agendas: [],
+            count: 0,
+            previous: null,
+            next: null,
+            api: this.agenda
         };
     }
 
+    showFetchFailedBanner(error) {
+        return (
+            <DangerAlert message={error} />
+        )
+    }
+
     componentDidMount() {
+        let that = this;
         fetch(agendaApi, {
             crossDomain: true,
-            method: 'GET',
+            method: 'GET'
         })
             .then(response => {
-                console.log(response)
                 return response.json();
             })
-            .then(data => this.setState({ agendas: data }))
-            .catch(error => alert("Failed to fetch. Please try again.!"));
+            .then(data => this.setState({ 
+                count: data['count'],
+                previous: data['previous'],
+                next: data['next'],
+                agendas: data['results'], 
+            }))
+            .catch(error => that.showFetchFailedBanner());
     }
 
     render() {
@@ -68,6 +89,17 @@ class App extends React.Component {
         return (
             <div>
                 <NavBar/>
+                <div class="container">
+                    <center>
+                        <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
+                        <button className="btn btn-link btn-active btn-custom">
+                            Previous
+                        </button>
+                        <button className="btn btn-link btn-active btn-custom">
+                            Next
+                        </button>
+                     </center>
+                </div>
                 <div>
                     {cards}
                 </div>
