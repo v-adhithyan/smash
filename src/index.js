@@ -10,10 +10,12 @@ import agendaApi from './constants.js';
 import {FlippingCard, FlippingCardFront} from 'react-ui-cards';
 import {DangerAlert, SuccessAlert, InfoAlert} from './alerts.js';
 //import LinkButton from './buttons.js'
+import DeleteAgenda from './actions.js';
+
 
 const rmj = require('render-markdown-js')
 
-function AgendaCard(name, content) {
+function AgendaCard(name, content, id) {
     name = "agenda " + name
     return(
             <div className="col-sm-4">
@@ -21,7 +23,7 @@ function AgendaCard(name, content) {
                     {content}
                 <center>
                     <button className="btn btn-primary btn-primary-spacing">Edit</button>
-                    <button className="btn btn-primary btn-primary-spacing">Delete</button>
+                    <button className="btn btn-primary btn-primary-spacing" onClick={() => {DeleteAgenda(id)} }>Delete</button>
                 </center>
                 </div>
                 
@@ -37,28 +39,30 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         
-        let agenda = agendaApi;
-        if(props.api) {
-            agenda = props.api
-        }
         this.state = {
             agendas: [],
             count: 0,
             previous: null,
             next: null,
-            api: this.agenda
+            api: props.api
         };
     }
 
     showFetchFailedBanner(error) {
         return (
-            <DangerAlert message={error} />
+            <div>
+                <DangerAlert message={error} />
+            </div>
         )
     }
 
     componentDidMount() {
         let that = this;
-        fetch(agendaApi, {
+        let api = agendaApi;
+        if(this.state.api != null) {
+            api = this.state.api;
+        }
+        fetch(api, {
             crossDomain: true,
             method: 'GET'
         })
@@ -74,6 +78,18 @@ class App extends React.Component {
             .catch(error => that.showFetchFailedBanner());
     }
 
+    showNext() {
+        if(this.state.next) {
+
+        }
+    }
+
+    showPrevious() {
+        if(this.state.previous) {
+
+        }
+    }
+
     render() {
         let cards = [];
 
@@ -82,7 +98,7 @@ class App extends React.Component {
             let agenda_html = rmj(agenda_raw);
             let rendered_agenda = renderHTML(agenda_html);
             let name = "agenda-col-" + ((i%4)+1);
-            cards.push(AgendaCard(name, rendered_agenda))
+            cards.push(AgendaCard(name, rendered_agenda, this.state.agendas[i].id))
         }
         
        
@@ -92,12 +108,17 @@ class App extends React.Component {
                 <div class="container">
                     <center>
                         <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
-                        <button className="btn btn-link btn-active btn-custom">
-                            Previous
-                        </button>
-                        <button className="btn btn-link btn-active btn-custom">
-                            Next
-                        </button>
+                        
+                                <button className="btn btn-link btn-active btn-custom">
+                                Previous
+                                </button>
+                         
+                        
+                        
+                            <button className="btn btn-link btn-active btn-custom" onClick={this.showNext()}>
+                                Next
+                            </button>
+                        
                      </center>
                 </div>
                 <div>
