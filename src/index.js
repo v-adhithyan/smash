@@ -21,12 +21,11 @@ function AgendaCard(name, content, id) {
             <div className="col-sm-4">
                 <div className={name}>
                     {content}
-                <center>
-                    <button className="btn btn-primary btn-primary-spacing">Edit</button>
-                    <button className="btn btn-primary btn-primary-spacing" onClick={() => {DeleteAgenda(id)} }>Delete</button>
-                </center>
+                    <center>
+                        <button className="btn btn-primary btn-primary-spacing">Edit</button>
+                        <button className="btn btn-primary btn-primary-spacing" onClick={() => {DeleteAgenda(id)} }>Delete</button>
+                    </center>
                 </div>
-                
             </div>
     )
 }
@@ -44,16 +43,19 @@ class App extends React.Component {
             count: 0,
             previous: null,
             next: null,
-            api: props.api
+            api: props.api,
+            failedToFetch: false,
+            failMessage: ""
         };
+        this.showFetchFailedBanner = this.showFetchFailedBanner.bind(this);
     }
 
     showFetchFailedBanner(error) {
-        return (
-            <div>
-                <DangerAlert message={error} />
-            </div>
-        )
+        console.log("error banner" + error)
+        this.setState({
+            failedToFetch: true,
+            failMessage: error
+        })
     }
 
     componentDidMount() {
@@ -75,7 +77,7 @@ class App extends React.Component {
                 next: data['next'],
                 agendas: data['results'], 
             }))
-            .catch(error => that.showFetchFailedBanner());
+            .catch(error => that.showFetchFailedBanner(error.message));
     }
 
     showNext() {
@@ -106,23 +108,38 @@ class App extends React.Component {
             <div>
                 <NavBar/>
                 <div class="container">
-                    <center>
-                        <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
-                        
-                                <button className="btn btn-link btn-active btn-custom">
-                                Previous
-                                </button>
-                         
-                        
-                        
-                            <button className="btn btn-link btn-active btn-custom" onClick={this.showNext()}>
-                                Next
-                            </button>
-                        
-                     </center>
-                </div>
-                <div>
-                    {cards}
+                        {
+                            this.state.failedToFetch &&
+                            <div>
+                                <center>
+                                    <DangerAlert message={this.state.failMessage}/>
+                                </center>
+                            </div>
+                        } 
+                        {
+                            !this.state.failedToFetch &&
+                            <div>
+                                <center>
+                                    <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
+                                        { 
+                                            this.state.previous &&
+                                            <button className="btn btn-link btn-active btn-custom">
+                                                Previous
+                                            </button>
+                                        }
+                                        
+                                        {
+                                            this.state.next &&
+                                            <button className="btn btn-link btn-active btn-custom" onClick={this.showNext()}>
+                                                Next
+                                            </button>
+                                        }
+                                </center>
+                                <div>
+                                {cards}
+                                </div>
+                            </div>
+                        }
                 </div>
             </div>
         )
