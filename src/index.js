@@ -43,11 +43,13 @@ class App extends React.Component {
             count: 0,
             previous: null,
             next: null,
-            api: props.api,
+            api: agendaApi,
             failedToFetch: false,
-            failMessage: ""
+            failMessage: "",
+            buttonClicked: false
         };
         this.showFetchFailedBanner = this.showFetchFailedBanner.bind(this);
+        this.showNext = this.showNext.bind(this);
     }
 
     showFetchFailedBanner(error) {
@@ -58,41 +60,56 @@ class App extends React.Component {
         })
     }
 
-    componentDidMount() {
+    fetchAndShow() {
         let that = this;
-        let api = agendaApi;
-        if(this.state.api != null) {
-            api = this.state.api;
-        }
-        fetch(api, {
+        fetch(this.state.api, {
             crossDomain: true,
             method: 'GET'
         })
             .then(response => {
                 return response.json();
             })
-            .then(data => this.setState({ 
+            .then(data => this.setState({
                 count: data['count'],
                 previous: data['previous'],
                 next: data['next'],
-                agendas: data['results'], 
+                agendas: data['results'],
             }))
-            .catch(error => that.showFetchFailedBanner(error.message));
+            .catch(error => this.showFetchFailedBanner(error.message));
+    }
+
+    componentDidMount() {
+        this.fetchAndShow()
     }
 
     showNext() {
         if(this.state.next) {
-
+            this.setState({
+                api: this.state.next,
+                buttonClicked: true
+            })
         }
     }
 
     showPrevious() {
         if(this.state.previous) {
-
+            this.setState({
+                api: this.state.previous,
+                buttonClicked: true
+            })
         }
     }
 
     render() {
+        let that = this;
+        
+        if(this.state.buttonClicked) {
+            this.fetchAndShow();
+            this.setState({
+                buttonClicked: false
+            })
+        }
+
         let cards = [];
 
         for (var i = 0; i < this.state.agendas.length; i++) {
@@ -123,20 +140,20 @@ class App extends React.Component {
                                     <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
                                         { 
                                             this.state.previous &&
-                                            <button className="btn btn-link btn-active btn-custom">
+                                            <button className="btn btn-link btn-active btn-custom" onClick={() => this.showPrevious()}>
                                                 Previous
                                             </button>
                                         }
                                         
                                         {
                                             this.state.next &&
-                                            <button className="btn btn-link btn-active btn-custom" onClick={this.showNext()}>
+                                            <button className="btn btn-link btn-active btn-custom" onClick={() => this.showNext()}>
                                                 Next
                                             </button>
                                         }
                                 </center>
                                 <div>
-                                {cards}
+                                    {cards}
                                 </div>
                             </div>
                         }
