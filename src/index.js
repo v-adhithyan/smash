@@ -8,7 +8,7 @@ import NavBar from './navbar.js';
 import agendaApi from './constants.js';
 import {DangerAlert, InfoAlert} from './alerts.js';
 import DeleteAgenda from './actions.js';
-
+import Spinner from './spinner.js'
 
 const rmj = require('render-markdown-js')
 
@@ -43,10 +43,12 @@ class App extends React.Component {
             api: agendaApi,
             failedToFetch: false,
             failMessage: "",
-            buttonClicked: false
+            buttonClicked: false,
+            loading: false
         };
         this.showFetchFailedBanner = this.showFetchFailedBanner.bind(this);
         this.showNext = this.showNext.bind(this);
+        this.flipLoading = this.flipLoading.bind(this);
     }
 
     showFetchFailedBanner(error) {
@@ -58,12 +60,14 @@ class App extends React.Component {
     }
 
     fetchAndShow() {
-        let that = this;
+        this.flipLoading();
+
         fetch(this.state.api, {
             crossDomain: true,
             method: 'GET'
         })
             .then(response => {
+                this.flipLoading();
                 return response.json();
             })
             .then(data => this.setState({
@@ -97,6 +101,14 @@ class App extends React.Component {
         }
     }
 
+    flipLoading() {
+        console.log("flip");
+        this.setState({
+            loading: !this.state.loading
+        })
+        console.log(this.state.loading)
+    }
+
     render() {
         let that = this;
         
@@ -123,7 +135,11 @@ class App extends React.Component {
                 <NavBar/>
                 <div class="container">
                         {
-                            this.state.failedToFetch &&
+                            this.state.loading &&
+                            <Spinner loading={this.state.loading} />
+                        }
+                        {
+                            !this.state.loading && this.state.failedToFetch &&
                             <div>
                                 <center>
                                     <DangerAlert message={this.state.failMessage}/>
@@ -131,7 +147,7 @@ class App extends React.Component {
                             </div>
                         } 
                         {
-                            !this.state.failedToFetch &&
+                            !this.state.loading && !this.state.failedToFetch &&
                             <div>
                                 <center>
                                     <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
