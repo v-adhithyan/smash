@@ -1,15 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import renderHTML from 'react-render-html';
-import SplitterLayout from 'react-splitter-layout';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import AgendaForm from './forms.js';
 import './index.css';
 import NavBar from './navbar.js';
 import agendaApi from './constants.js';
-import {FlippingCard, FlippingCardFront} from 'react-ui-cards';
-import {DangerAlert, SuccessAlert, InfoAlert} from './alerts.js';
-//import LinkButton from './buttons.js'
+import {DangerAlert, InfoAlert} from './alerts.js';
 import DeleteAgenda from './actions.js';
 
 
