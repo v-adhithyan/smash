@@ -15,7 +15,7 @@ const rmj = require('render-markdown-js')
 function AgendaCard(name, content, id) {
     name = "agenda " + name
     return(
-            <div className="col-sm-4">
+            <div className="col-sm-6">
                 <div className={name}>
                     {content}
                     <center>
@@ -76,7 +76,10 @@ class App extends React.Component {
                 next: data['next'],
                 agendas: data['results'],
             }))
-            .catch(error => this.showFetchFailedBanner(error.message));
+            .catch(error => {
+                this.flipLoading();
+                this.showFetchFailedBanner(error.message)
+            });
     }
 
     componentDidMount() {
