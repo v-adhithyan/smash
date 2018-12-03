@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from './navbar.js';
 import agendaApi from './constants.js';
 import {DangerAlert, SuccessAlert} from './alerts.js';
+import Spinner from './spinner.js';
 
 class AgendaForm extends React.Component {
     constructor(props) {
@@ -15,11 +16,13 @@ class AgendaForm extends React.Component {
             submitted: false,
             success: false,
             error: false,
-            message: "Hey there, Plan your awesome work !"
+            message: "Hey there, Plan your awesome work !",
+            loading: false
         }
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.flipLoading = this.flipLoading.bind(this);
     }
 
     handleChange(event) {
@@ -53,11 +56,18 @@ class AgendaForm extends React.Component {
         })
     }
 
+    flipLoading() {
+        this.setState({
+            loading: !this.state.loading
+        })
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         this.setDefaults()
+        this.flipLoading();
         const that = this;
-
+        
         let data = {
             agenda_title: this.state.agenda_title.toString(),
             agenda_text: this.state.agenda_text.toString(),
@@ -70,7 +80,8 @@ class AgendaForm extends React.Component {
             },
             method: 'post',
             body: JSON.stringify(data)
-        }).then(function(response) {
+        }).then(response => {
+            this.flipLoading();
             if(response.status === 200 || response.status === 201) {
                 that.setSuccess("Successfully created agenda");
             } else {
@@ -78,7 +89,10 @@ class AgendaForm extends React.Component {
                 that.setFail("Failed to create agenda");
             }
         }).then(data => {})
-        .catch(error => that.setFail(error.message) )
+        .catch(error => {
+            this.flipLoading();
+            that.setFail(error.message)
+        } )
     }
 
     render() {
@@ -86,6 +100,10 @@ class AgendaForm extends React.Component {
             <div>
                 <NavBar/>
                 <center>
+                    {
+                        this.state.loading && 
+                        <Spinner loading={this.state.loading} />
+                    }
                     {
                         this.state.success ?
                             <SuccessAlert message={this.state.message} /> : <div></div>
@@ -118,7 +136,7 @@ class AgendaForm extends React.Component {
                         <div >
                             <label>
                                 Agenda:
-                    <textarea
+                             <textarea
                                     type="text"
                                     className="form-control"
                                     name="agenda_text"
