@@ -7,6 +7,7 @@ import Spinner from './spinner.js';
 class AgendaForm extends React.Component {
     constructor(props) {
         super(props);
+        
         this.state = {
             form_name: 'Create Agenda',
             value: '',
@@ -17,9 +18,15 @@ class AgendaForm extends React.Component {
             success: false,
             error: false,
             message: "Hey there, Plan your awesome work !",
-            loading: false
+            loading: false,
+            id: this.props.match.params.id
         }
 
+        if(props.edit) {
+            this.setState({
+                show: false
+            })
+        }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.flipLoading = this.flipLoading.bind(this);
@@ -93,6 +100,12 @@ class AgendaForm extends React.Component {
             this.flipLoading();
             that.setFail(error.message)
         } )
+    }
+
+    componentWillUnmount() {
+        this.setState({
+            show: false
+        })
     }
 
     render() {
