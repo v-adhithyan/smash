@@ -19,7 +19,7 @@ function AgendaCard(name, content, id) {
                 <div className={name}>
                     {content}
                     <center>
-                        <button className="btn btn-primary btn-primary-spacing" onClick={() => {window.location.href="/agenda/" + id}}>Edit</button>
+                        <button className="btn btn-primary btn-primary-spacing" onClick={() => {window.location.href="/edit/" + id}}>Edit</button>
                         <button className="btn btn-primary btn-primary-spacing" onClick={() => {DeleteAgenda(id)} }>Delete</button>
                     </center>
                 </div>
@@ -186,7 +186,7 @@ class Root extends React.Component {
                 <div>
                     <Route exact path='/' component={App} />
                     <Route path='/agenda' component={AgendaForm} />
-                    <Route path='/agenda/:id' component={AgendaForm} />
+                    <Route path='/edit/:id' component={AgendaForm} />
                 </div>
             </Router>
         )

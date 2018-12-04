@@ -7,7 +7,7 @@ import Spinner from './spinner.js';
 class AgendaForm extends React.Component {
     constructor(props) {
         super(props);
-        
+        console.log("super")
         this.state = {
             form_name: 'Create Agenda',
             value: '',
@@ -19,13 +19,17 @@ class AgendaForm extends React.Component {
             error: false,
             message: "Hey there, Plan your awesome work !",
             loading: false,
-            id: this.props.match.params.id
+            id: this.props.match.params.id,
+            edit: false,
+            showForm: true
         }
 
-        if(props.edit) {
-            this.setState({
-                show: false
-            })
+        let isEdit = window.location.pathname.indexOf("edit") > 0;
+        console.log("isedit: " + isEdit)
+        if(isEdit) {
+            this.state.edit = true;
+            this.state.form_name = "Edit Agenda";
+            this.state.showForm = false;
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -75,17 +79,25 @@ class AgendaForm extends React.Component {
         this.flipLoading();
         const that = this;
         
+        let api = agendaApi;
+        let httpMethod = "post";
+
+        if(this.state.edit) {
+            api += this.state.id;
+            httpMethod = "patch";
+        }
+
         let data = {
             agenda_title: this.state.agenda_title.toString(),
             agenda_text: this.state.agenda_text.toString(),
             reflection: ""
         }
-        fetch(agendaApi, {
+        fetch(api, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method: 'post',
+            method: httpMethod,
             body: JSON.stringify(data)
         }).then(response => {
             this.flipLoading();
@@ -102,10 +114,24 @@ class AgendaForm extends React.Component {
         } )
     }
 
-    componentWillUnmount() {
-        this.setState({
-            show: false
-        })
+    componentDidMount() {
+        //this.flipLoading();
+        if(this.state.edit) {
+            let api = agendaApi + this.state.id;
+            fetch(api, {
+                method: 'GET'
+            }).then(response => {
+                //this.flipLoading();
+                return response.json()})
+            .then(data => {
+                this.setState({
+                    agenda_title: data.agenda_title,
+                    agenda_text: data.agenda_text,
+                    showForm: true,
+                })
+            })
+            .catch(error => {})
+        }
     }
 
     render() {
@@ -129,7 +155,8 @@ class AgendaForm extends React.Component {
                 </center>
                 <div className="row">
                 <div className="col-sm-4"></div>
-                <div className="col-sm-4">
+                {
+                    this.state.showForm && <div className="col-sm-4">
                     <center><h1>{this.props.form_name || this.state.form_name}</h1>
                     </center>
                     <center>
@@ -174,7 +201,9 @@ class AgendaForm extends React.Component {
                         <button type="submit" className="btn btn-default btn-custom">Submit</button>
                     </form>
                     </center>
+                
                 </div>
+                }
                 <div className="col-sm-4"></div>
                 </div>
             </div>
