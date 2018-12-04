@@ -83,13 +83,13 @@ class AgendaForm extends React.Component {
         let httpMethod = "post";
 
         if(this.state.edit) {
-            api += this.state.id;
-            httpMethod = "patch";
+            api += this.state.id + "/";
+            httpMethod = "PUT";
         }
 
         let data = {
-            agenda_title: this.state.agenda_title.toString(),
-            agenda_text: this.state.agenda_text.toString(),
+            agenda_title: this.state.agenda_title,
+            agenda_text: this.state.agenda_text,
             reflection: ""
         }
         fetch(api, {
