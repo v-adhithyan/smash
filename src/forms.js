@@ -168,7 +168,7 @@ class AgendaForm extends React.Component {
           </div>
           {
             this.state.showForm &&
-            <div className="col-sm-4">
+            <div>
               <center>
                 <h1>
                   {this.props.form_name || this.state.form_name}
@@ -181,7 +181,7 @@ class AgendaForm extends React.Component {
                       Title:
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control input-lg"
                         name="agenda_title"
                         placeholder="title"
                         value={this.state.agenda_title}
@@ -193,11 +193,12 @@ class AgendaForm extends React.Component {
                       Agenda:
                       <textarea
                         type="text"
-                        className="form-control"
+                        className="form-control input-lg"
                         name="agenda_text"
                         placeholder="todo"
                         value={this.state.agenda_text}
-                        onChange={this.handleChange} />
+                        onChange={this.handleChange}
+                        rows="10" />
                     </label>
                   </div>
                   <div>
@@ -205,7 +206,7 @@ class AgendaForm extends React.Component {
                       Reflection:
                       <textarea
                         type="text"
-                        className="form-control"
+                        className="form-control input-lg"
                         name="reflection"
                         placeholder="reflection"
                         value={this.state.reflection}
@@ -218,7 +219,6 @@ class AgendaForm extends React.Component {
                     className="btn btn-default btn-custom">Submit</button>
                 </form>
               </center>
-
             </div>
           }
           <div className="col-sm-4">
