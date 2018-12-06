@@ -216,7 +216,7 @@ class AgendaForm extends React.Component {
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-default btn-custom">Submit</button>
+                    className="btn btn-primary btn-custom">Submit</button>
                 </form>
               </center>
             </div>

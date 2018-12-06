@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import renderHTML from 'react-render-html';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import AgendaForm from './forms.js';
+import NewAgendaForm from './new_form.js';
 import './index.css';
 import NavBar from './navbar.js';
 import agendaApi from './constants.js';
@@ -34,7 +35,7 @@ function makeRows(cards) {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             agendas: [],
             count: 0,
@@ -114,7 +115,7 @@ class App extends React.Component {
 
     render() {
         let that = this;
-        
+
         if(this.state.buttonClicked) {
             this.fetchAndShow();
             this.setState({
@@ -131,8 +132,8 @@ class App extends React.Component {
             let name = "agenda-col-" + ((i%4)+1);
             cards.push(AgendaCard(name, rendered_agenda, this.state.agendas[i].id))
         }
-        
-       
+
+
         return (
             <div>
                 <NavBar/>
@@ -148,19 +149,19 @@ class App extends React.Component {
                                     <DangerAlert message={this.state.failMessage}/>
                                 </center>
                             </div>
-                        } 
+                        }
                         {
                             !this.state.loading && !this.state.failedToFetch &&
                             <div>
                                 <center>
                                     <InfoAlert message={"Showing " + (this.state.count) + " agendas."} />
-                                        { 
+                                        {
                                             this.state.previous &&
                                             <button className="btn btn-link btn-active btn-custom" onClick={() => this.showPrevious()}>
                                                 Previous
                                             </button>
                                         }
-                                        
+
                                         {
                                             this.state.next &&
                                             <button className="btn btn-link btn-active btn-custom" onClick={() => this.showNext()}>
@@ -187,6 +188,7 @@ class Root extends React.Component {
                     <Route exact path='/' component={App} />
                     <Route path='/agenda' component={AgendaForm} />
                     <Route path='/edit/:id' component={AgendaForm} />
+                    <Route path='/preview' component={NewAgendaForm} />
                 </div>
             </Router>
         )
@@ -197,4 +199,3 @@ ReactDOM.render(
    <Root/>,
     document.getElementById('root')
 );
-
