@@ -7,10 +7,11 @@ const rmj = require('render-markdown-js')
 class NewAgendaForm extends React.Component {
   constructor(props) {
     super(props);
-    let initialInput = "# Type something .."
+    let initialInput = "### You can view the markdown preview here."
     this.state = {
       input: "",
-      placeholder: initialInput,
+      placeholder: "Type your note here",
+      title: "New note",
       preview: renderHTML(rmj(initialInput))
     }
 
@@ -22,9 +23,15 @@ class NewAgendaForm extends React.Component {
     const value = target.value;
     const name = target.name;
     let renderedMarkdown = renderHTML(rmj(value));
+    let newTitle = value.split("\n")[0];
+    if(newTitle) {
+      newTitle = newTitle.replace("#", "");
+    }
+    
     this.setState({
       [name]: value,
-      preview: renderedMarkdown
+      preview: renderedMarkdown,
+      title: (newTitle != this.state.title) ? newTitle : this.state.title
     });
   }
 
@@ -32,7 +39,8 @@ class NewAgendaForm extends React.Component {
     return(
       <div>
         <NavBar/>
-        <SplitterLayout>
+        <center><h1>{this.state.title}</h1></center>
+        <SplitterLayout percentage={true}>
           <div>
             <form>
               <textarea
