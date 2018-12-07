@@ -52,7 +52,12 @@ p, li, ul {
 }
 
 a {
-    color: whitesmoke;
+    background-color: #6200ee;
+    color: yellow;
+}
+
+a:active {
+  color: whitesmoke;
 }
 
 .agenda {

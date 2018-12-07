@@ -3,6 +3,8 @@ import NavBar from './navbar.js';
 import SplitterLayout from 'react-splitter-layout';
 import renderHTML from 'react-render-html';
 const rmj = require('render-markdown-js')
+const showdown  = require('showdown');
+showdown.setFlavor('github');
 
 class NewAgendaForm extends React.Component {
   constructor(props) {
@@ -22,12 +24,13 @@ class NewAgendaForm extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let renderedMarkdown = renderHTML(rmj(value));
+    let converter = new showdown.Converter();
+    let renderedMarkdown = renderHTML(converter.makeHtml(value));
     let newTitle = value.split("\n")[0];
     if(newTitle) {
       newTitle = newTitle.replace("#", "");
     }
-    
+
     this.setState({
       [name]: value,
       preview: renderedMarkdown,
