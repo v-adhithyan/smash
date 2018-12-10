@@ -12,6 +12,8 @@ import DeleteAgenda from './actions.js';
 import Spinner from './spinner.js'
 
 const rmj = require('render-markdown-js')
+const showdown  = require('showdown');
+showdown.setFlavor('github');
 
 function AgendaCard(name, content, id) {
     name = "agenda " + name
@@ -127,7 +129,8 @@ class App extends React.Component {
 
         for (var i = 0; i < this.state.agendas.length; i++) {
             let agenda_raw = this.state.agendas[i].agenda_text ;
-            let agenda_html = rmj(agenda_raw);
+            let converter = new showdown.Converter();
+            let agenda_html = converter.makeHtml(agenda_raw);
             let rendered_agenda = renderHTML(agenda_html);
             let name = "agenda-col-" + ((i%4)+1);
             cards.push(AgendaCard(name, rendered_agenda, this.state.agendas[i].id))
