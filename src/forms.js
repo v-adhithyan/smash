@@ -3,6 +3,12 @@ import NavBar from './navbar.js';
 import agendaApi from './constants.js';
 import {DangerAlert, SuccessAlert} from './alerts.js';
 import Spinner from './spinner.js';
+import SplitterLayout from 'react-splitter-layout';
+import renderHTML from 'react-render-html';
+import FloatGroup from 'react-float-button';
+const rmj = require('render-markdown-js');
+const showdown  = require('showdown');
+showdown.setFlavor('github');
 
 class AgendaForm extends React.Component {
   constructor(props) {
@@ -10,13 +16,15 @@ class AgendaForm extends React.Component {
     this.state = {
       form_name: 'Create Agenda',
       value: '',
-      agenda_title: '',
+      agenda_title: 'New Agenda',
       agenda_text: '',
       reflection: '',
       submitted: false,
       success: false,
       error: false,
       message: "Hey there, Plan your awesome work !",
+      placeholder: "What do you want to note now ?",
+      preview: renderHTML(rmj("### Type on left side. This is the preview pane.")),
       loading: false,
       id: this.props.match.params.id,
       edit: false,
@@ -38,9 +46,16 @@ class AgendaForm extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
+    let converter = new showdown.Converter();
+    let renderedMarkdown = renderHTML(converter.makeHtml(value));
+    let newTitle = value.split("\n")[0];
+    if(newTitle) {
+      newTitle = newTitle.replace("#", "");
+    }
     this.setState({
-      [name]: value
+      [name]: value,
+      preview: renderedMarkdown,
+      agenda_title: (newTitle != this.state.agenda_title) ? newTitle: this.state.agenda_title
     });
   }
 
@@ -126,8 +141,9 @@ class AgendaForm extends React.Component {
         }
       }).then(data => {
         this.setState({
-          agenda_title: data.agenda_title,
+          agenda_title: data.agenda_text.split("\n")[0].replace("#", ""),
           agenda_text: data.agenda_text,
+          preview: renderHTML(rmj(data.agenda_text)),
           showForm: true,
         })
       })
@@ -163,67 +179,35 @@ class AgendaForm extends React.Component {
             </div>
           }
         </center>
-        <div className="row">
-          <div className="col-sm-4">
-          </div>
-          {
-            this.state.showForm &&
-            <div>
-              <center>
-                <h1>
-                  {this.props.form_name || this.state.form_name}
-                </h1>
-              </center>
-              <center>
+
+        {
+          this.state.showForm &&
+          <div>
+            <center>
+              <h1>
+                {this.state.agenda_title}
+              </h1>
+            </center>
+            <SplitterLayout percentage={true}>
+              <div>
                 <form onSubmit={this.handleSubmit}>
-                  <div>
-                    <label>
-                      Title:
-                      <input
-                        type="text"
-                        className="form-control input-lg"
-                        name="agenda_title"
-                        placeholder="title"
-                        value={this.state.agenda_title}
-                        onChange={this.handleChange} />
-                    </label>
-                  </div>
-                  <div >
-                    <label>
-                      Agenda:
-                      <textarea
-                        type="text"
-                        className="form-control input-lg"
-                        name="agenda_text"
-                        placeholder="todo"
-                        value={this.state.agenda_text}
-                        onChange={this.handleChange}
-                        rows="10" />
-                    </label>
-                  </div>
-                  <div>
-                    <label>
-                      Reflection:
-                      <textarea
-                        type="text"
-                        className="form-control input-lg"
-                        name="reflection"
-                        placeholder="reflection"
-                        value={this.state.reflection}
-                        onChange={this.handleChange}
-                        disabled={true} />
-                    </label>
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-custom">Submit</button>
+                  <textarea
+                    autofocus
+                    type="text"
+                    name="agenda_text"
+                    placeholder={this.state.placeholder}
+                    value={this.state.agenda_text}
+                    onChange={this.handleChange}
+                    />
                 </form>
-              </center>
-            </div>
-          }
-          <div className="col-sm-4">
+              </div>
+              <div class="preview">
+                {this.state.preview}
+              </div>
+            </SplitterLayout>
           </div>
-        </div>
+        }
+
       </div>
     );
   }
