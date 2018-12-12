@@ -3,6 +3,9 @@ import NavBar from './navbar.js';
 import agendaApi from './constants.js';
 import {DangerAlert, SuccessAlert} from './alerts.js';
 import Spinner from './spinner.js';
+import renderHTML from 'react-render-html';
+const showdown  = require('showdown');
+showdown.setFlavor('github');
 
 class AgendaForm extends React.Component {
   constructor(props) {
@@ -20,7 +23,8 @@ class AgendaForm extends React.Component {
       loading: false,
       id: this.props.match.params.id,
       edit: false,
-      showForm: true
+      showForm: true,
+      markdownPreview: "",
     }
 
     let isEdit = window.location.pathname.indexOf("edit") > 0;
@@ -34,13 +38,22 @@ class AgendaForm extends React.Component {
     this.flipLoading = this.flipLoading.bind(this);
   }
 
+  getMarkdown(text) {
+    let converter = new showdown.Converter();
+    return renderHTML(converter.makeHtml(text));
+  }
   handleChange(event) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+    let renderedMarkdown = this.state.markdownPreview;
+    if(name == "agenda_text") {
+      renderedMarkdown = this.getMarkdown(value);
+    }
 
     this.setState({
-      [name]: value
+      [name]: value,
+      markdownPreview: (this.state.markdownPreview != renderedMarkdown) ? renderedMarkdown : this.state.markdownPreview
     });
   }
 
@@ -129,6 +142,7 @@ class AgendaForm extends React.Component {
           agenda_title: data.agenda_title,
           agenda_text: data.agenda_text,
           showForm: true,
+          markdownPreview: this.getMarkdown(data.agenda_text)
         })
       })
       .catch(error => {
@@ -218,7 +232,41 @@ class AgendaForm extends React.Component {
                     type="submit"
                     className="btn btn-primary btn-custom">Submit</button>
                 </form>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-lg btn-custom"
+                    data-toggle="modal"
+                    data-target="#myModal">Preview</button>
+                </div>
               </center>
+              <div
+                id="myModal"
+                class="modal fade"
+                role="dialog">
+                <div class="modal-dialog">
+
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Preview</h4>
+                    </div>
+                    <div class="modal-body">
+                        {this.state.markdownPreview}
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </div>
           }
           <div className="col-sm-4">
