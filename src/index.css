@@ -13,7 +13,7 @@ body {
 }
 
 .navbar-custom {
-    background-color: #634489;
+    background-color: #6200ee;
     color: white;
 }
 
@@ -36,7 +36,7 @@ body {
 
 /* for dropdown only - change the color of droodown */
 .navbar-custom .dropdown-menu {
-    background-color: #FCA326;
+    background-color: #ff5500;
 }
 .navbar-custom .dropdown-item {
     color: white;
@@ -44,15 +44,20 @@ body {
 .navbar-custom .dropdown-item:hover,
 .navbar-custom .dropdown-item:focus {
     color: white;
-    background-color: #e24329;
+    background-color: rgba(255,255,255,.5);
 }
 
 p, li, ul {
     font-size: 14pt;
 }
 
-.navbar-custom a {
-  color: #FCA326;
+a {
+    background-color: #6200ee;
+    color: yellow;
+}
+
+a:active {
+  color: white;
 }
 
 .agenda {
@@ -66,7 +71,6 @@ p, li, ul {
     padding-top: 5px;
     color: white;
     margin-bottom: 10px;
-    word-wrap: break-word;
 
     -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
        -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -181,21 +185,4 @@ textarea {
   height: 100vw;
   border: none;
   font-size: 14px;
-  border-color: black;
-}
-
-.preview {
-  height: 100%;
-  width: 100%;
-  background-color: #DC5960;
-  padding-left: 10px;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  color: white;
-}
-
-.preview a {
-  color: #60D156;
-  background-color: #DC5960;
 }

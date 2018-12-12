@@ -9,7 +9,7 @@ showdown.setFlavor('github');
 class NewAgendaForm extends React.Component {
   constructor(props) {
     super(props);
-    let initialInput = "### You can view the markdown preview here. When you leave the page, note will be auto saved."
+    let initialInput = "### You can view the markdown preview here."
     this.state = {
       input: "",
       placeholder: "Type your note here",
@@ -38,16 +38,6 @@ class NewAgendaForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.setDefaults();
-
-
-  }
-  componentWillUnMount() {
-
-  }
-
   render() {
     return(
       <div>
@@ -56,7 +46,7 @@ class NewAgendaForm extends React.Component {
         <SplitterLayout percentage={true}>
           <div>
             <form>
-              <textarea autofocus
+              <textarea
               type="text"
               name="input"
               placeholder={this.state.placeholder}
@@ -65,7 +55,7 @@ class NewAgendaForm extends React.Component {
               />
             </form>
           </div>
-          <div class="preview">
+          <div>
             {this.state.preview}
           </div>
         </SplitterLayout>
