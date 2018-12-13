@@ -81,4 +81,4 @@ function doDeletion(url) {
         .catch(error => alert(error.message));
 }
 
-export default {DeleteAgenda, EditAgenda};
+export default DeleteAgenda;

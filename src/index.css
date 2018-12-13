@@ -4,9 +4,8 @@ html {
 
 body {
     height: 100%;
-    font-family: 'Karla', sans-serif;
+    font-family: 'Lato', 'Karla', sans-serif;
     letter-spacing: 0.1px;
-    background-color: #f5f5f5;
 }
 
 #root {
@@ -53,20 +52,25 @@ p, li, ul {
 }
 
 a {
-    color: whitesmoke;
+    background-color: #6200ee;
+    color: yellow;
+}
+
+a:active {
+  color: white;
 }
 
 .agenda {
     width: 100%;
     height: 100%;
-    
+
     border-color: black;
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 5px;
     padding-top: 5px;
     color: white;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 
     -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
        -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -76,22 +80,72 @@ a {
 }
 
 .agenda-col-1 {
-    background-color: #DE6C70;
+    background-color: #4D394B;
+}
+
+.agenda-col-1:hover {
+  background-color: #3E313C;
+}
+
+.agenda-col-1 a {
+  color: #eb4d5c;
+  background-color: #4D394B;
+}
+
+.agenda-col-1 a:hover {
+  color: #eb4d5c;
+  background-color: #3E313C;
 }
 
 .agenda-col-2 {
-    background-color: #76C4AE;
+    background-color: #0D7E83;
+}
+
+.agenda-col-2:hover {
+  background-color: #076570;
+}
+
+.agenda-col-2 a {
+  color: #94E864;
+  background-color: #0D7E83;
+}
+
+.agenda-col-2 a:hover {
+  color: #94E864;
+  background-color: #076570;
 }
 
 .agenda-col-3 {
-    background-color: #DDB0A0;
+    background-color: #4D5250;
+}
+
+.agenda-col-3:hover {
+    background-color: #444A47;
+}
+
+.agenda-col-3 a {
+    color: #D39B46;
+    background-color: #4D5250;
+}
+
+.agenda-col-3 a:hover{
+    color: #D39B46;
+    background-color: #4D5250;
 }
 
 .agenda-col-4 {
-    background-color: #CABD80;
+    background-color: #4F2F4C;
 }
 
-.btn-primary-spacing 
+.agenda-col-4:hover {
+  background-color: #452842;
+}
+
+.agenda-col-4 a {
+  color: #D0FF00;
+  background-color: #4F2F4C;
+}
+.btn-primary-spacing
 {
     margin-right: 5px;
     margin-bottom: 5px !important;
@@ -124,4 +178,15 @@ a {
 @-o-keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+textarea {
+  width: 100%;
+  height: 100vw;
+  border: none;
+  font-size: 14px;
+}
+
+.btn-custom {
+  margin-right: 5px;
 }
