@@ -186,3 +186,7 @@ textarea {
   border: none;
   font-size: 14px;
 }
+
+.btn-custom {
+  margin-right: 5px;
+}

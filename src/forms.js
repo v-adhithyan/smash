@@ -188,8 +188,8 @@ class AgendaForm extends React.Component {
                   {this.props.form_name || this.state.form_name}
                 </h1>
               </center>
-              <center>
                 <form onSubmit={this.handleSubmit}>
+                  {/*
                   <div>
                     <label>
                       Title:
@@ -202,6 +202,7 @@ class AgendaForm extends React.Component {
                         onChange={this.handleChange} />
                     </label>
                   </div>
+                  */}
                   <div >
                     <label>
                       Agenda:
@@ -215,6 +216,7 @@ class AgendaForm extends React.Component {
                         rows="10" />
                     </label>
                   </div>
+                  {/*
                   <div>
                     <label>
                       Reflection:
@@ -228,18 +230,20 @@ class AgendaForm extends React.Component {
                         disabled={true} />
                     </label>
                   </div>
+                  */}
+                  <center></center>
                   <button
                     type="submit"
                     className="btn btn-primary btn-custom">Submit</button>
+                    <button
+                      type="button"
+                      class="btn btn-info btn-custom"
+                      data-toggle="modal"
+                      data-target="#myModal">Preview</button>
                 </form>
                 <div>
-                  <button
-                    type="button"
-                    class="btn btn-info btn-lg btn-custom"
-                    data-toggle="modal"
-                    data-target="#myModal">Preview</button>
+                  
                 </div>
-              </center>
               <div
                 id="myModal"
                 class="modal fade"
